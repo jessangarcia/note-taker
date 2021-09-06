@@ -1,14 +1,34 @@
-const fs = require('fs')
-const path = require('path')
+//required installs
+const fs = require('fs');
+const path = require('path');
+//https://www.npmjs.com/package/uuid allows you to create id for each note
+const uuid = require('uuid');
 const express = require('express');
+
 const PORT = process.env.PORT || 3001
 const app = express();
-const { notes } = require('./db/db.json')
-//const routes = require('./routes/index')
+//grabs info from db folder
+const notes = require('./db/db.json')
+//middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public")); //https://expressjs.com/en/starter/static-files.html
 
+
+//gets db content 
 app.get('/api/notes', (req, res) => {
     res.json(notes);
 });
+
+//pulls notes by an id
+app.get('/api/notes/:id', (req, res) => {
+    res.json((notes[req.params.id]));
+});
+
+app.post('/api/notes', (req, res) => {
+    console.log(req.body);
+    res.json(req.body);
+})
 
 
 app.listen(PORT, () => {
