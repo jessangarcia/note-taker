@@ -5,7 +5,7 @@ const path = require('path');
 const uuid = require('uuid');
 const express = require('express');
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 const app = express();
 //grabs info from db folder
 const notes = require('./db/db.json')
@@ -39,11 +39,11 @@ app.get('/', (req, res) => {
 });
 
 //calls the notes.html
-router.get('/notes', (req, res) => {
+app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/notes.html'));
 });
 
 //also from mod 11
 app.listen(PORT, () => {
-    console.log(`API server now on port ${PORT}`);
+    console.log(`API server now on port ${PORT}!`);
 })
