@@ -15,19 +15,24 @@ app.use(express.json());
 app.use(express.static("public")); //https://expressjs.com/en/starter/static-files.html
 
 
-//gets db content 
 app.get('/api/notes', (req, res) => {
-    res.json(notes);
+    //res.json(notes);
+    res.sendFile(path.join(__dirname, "/db/db.json")); //http://expressjs.com/en/api.html#res.sendFile
 });
 
-//pulls notes by an id
-app.get('/api/notes/:id', (req, res) => {
-    res.json((notes[req.params.id]));
-});
+// //pulls notes by an id
+// app.get('/api/notes/:id', (req, res) => {
+//     res.json((notes[req.params.id]));
+// });
 
 app.post('/api/notes', (req, res) => {
-    console.log(req.body);
-    res.json(req.body);
+    //console.log(req.body);
+    const notes = JSON.parse(fs.readFileSync('./db/db.json'))
+    const newNote = req.body;
+    newNote.id = uuid.v4();
+    notes.push(newNote);
+    fs.writeFileSync('./db/db.json', JSON.stringify(notes))
+    res.json(notes);
 })
 
 
