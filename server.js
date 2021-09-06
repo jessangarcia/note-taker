@@ -32,6 +32,18 @@ app.post('/api/notes', (req, res) => {
     res.json(notes);
 })
 
+//http://expressjs.com/en/api.html#app.delete.method
+//delete notes by id
+app.delete('/api/notes/:id', (req, res) => {
+    //https://stackoverflow.com/questions/65015000/how-do-i-use-express-js-app-delete-to-remove-a-specific-object-from-an-array
+    //calling the db data like in app.post()
+    const notes = JSON.parse(fs.readFileSync('./db/db.json'));
+    const del = notes.filter((deleteNotes) => deleteNotes.id !== req.params.id);
+    //taken from app.post()
+    fs.writeFileSync('./db/db.json', JSON.stringify(del))
+    res.json(del);
+})
+
 //calls for index.html
 //took from module 11
 app.get('/', (req, res) => {
