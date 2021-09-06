@@ -18,24 +18,32 @@ app.use(express.static("public")); //https://expressjs.com/en/starter/static-fil
 app.get('/api/notes', (req, res) => {
     //res.json(notes);
     res.sendFile(path.join(__dirname, "/db/db.json")); //http://expressjs.com/en/api.html#res.sendFile
-});
+})
 
-// //pulls notes by an id
-// app.get('/api/notes/:id', (req, res) => {
-//     res.json((notes[req.params.id]));
-// });
-
+//adds new note over to db array, and gives it a unique id
 app.post('/api/notes', (req, res) => {
     //console.log(req.body);
     const notes = JSON.parse(fs.readFileSync('./db/db.json'))
     const newNote = req.body;
     newNote.id = uuid.v4();
     notes.push(newNote);
+    //has to have the './db/db.json' not the global const at the top
     fs.writeFileSync('./db/db.json', JSON.stringify(notes))
     res.json(notes);
 })
 
+//calls for index.html
+//took from module 11
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/index.html'));
+});
 
+//calls the notes.html
+router.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/notes.html'));
+});
+
+//also from mod 11
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}`);
 })
